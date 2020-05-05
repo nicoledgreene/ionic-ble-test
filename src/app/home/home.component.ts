@@ -13,10 +13,13 @@ export class Home {
   constructor(private ble: BLE, private ngZone: NgZone) {}
 
   ngOnInit() {
-
+    // this.devices = [
+    //   {name: 'test', id: '234', rssi: 'testrssi'}
+    // ]
   }
 
   public scanForBLE() {
+    console.log('scan for ble');
     this.devices = [];
     this.ble.scan([], 15).subscribe(device => {
       device => this.onDiscovered(device);
