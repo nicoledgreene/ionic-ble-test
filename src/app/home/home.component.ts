@@ -12,7 +12,7 @@ export class Home {
   devices: any[] = [];
   statusMessage: string;
 
-  constructor(private ble: BLE, private ngZone: NgZone, private toastCtrl: ToastController) {}
+  constructor(private ble: BLE, private zone: NgZone, private toastCtrl: ToastController) {}
 
   ngOnInit() {
     // this.devices = [
@@ -24,19 +24,17 @@ export class Home {
     console.log('scan for ble');
     this.devices = [];
     this.ble.scan([], 5).subscribe(device => {
-      device => this.onDiscovered(device);
-      error => this.scanError(error)
+      console.log('Discovered '+JSON.stringify(device, null, 2))
+      this.zone.run(() => {
+        this.devices.push(device);
+        this.devices = this.devices.slice(0)
+        console.log(device);
+      }), error => {
+        this.scanError(error);
+      }
     })
 
     setTimeout(this.setStatus.bind(this), 5000, 'Scan complete');
-  }
-
-  private onDiscovered(device) {
-    console.log('Discovered' +  JSON.stringify(device, null, 2));
-    this.ngZone.run(() => {
-      this.devices.push(device);
-      console.log(device);
-    })
   }
   
   // If location permission is denied, you'll end up here
