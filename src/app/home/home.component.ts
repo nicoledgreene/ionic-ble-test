@@ -50,7 +50,7 @@ export class Home {
 
   setStatus(message) {
     console.log(message);
-    this.ngZone.run(() => {
+    this.zone.run(() => {
       this.statusMessage = message;
     });
   }
